@@ -1,0 +1,108 @@
+leveldata var noteSpeed : Number
+leveldata var noteSize : Number
+leveldata var levelAudioOffset : Number
+leveldata var levelInputOffset : Number
+
+leveldata var stageWidth : Number
+leveldata var stageHeight : Number
+leveldata var laneWidth : Number
+leveldata var laneYOffset : Number
+leveldata var laneYMultiplier : Number
+leveldata var laneY1 : Number
+leveldata var laneY2 : Number
+leveldata var noteWidth : Number
+leveldata var noteHeight : Number
+leveldata var noteBaseY1 : Number
+leveldata var noteBaseY2 : Number
+
+leveldata var noteTimeOffset : Number
+leveldata var inputOffset : Number
+
+script Stage {
+    callback preprocess {
+        levelUI.menu = UIInfo(
+            anchorX = levelData.aspectRatio - 0.05,
+            anchorY = 0.95,
+            pivotX = 1,
+            pivotY = 1,
+            width = 0.15,
+            height = 0.15,
+            alpha = 1,
+            background = true,
+        )
+        levelUI.judgment = UIInfo(
+            anchorX = 0,
+            anchorY = 2 * -0.25,
+            pivotX = 0.5,
+            pivotY = 0,
+            width = 0.8,
+            height = 0.2,
+            alpha = 1.0,
+        )
+        levelUI.comboValue = UIInfo(
+            anchorX = levelData.aspectRatio * 0.7,
+            anchorY = 0,
+            pivotX = 0.5,
+            pivotY = 0,
+            width = 0.5,
+            height = 0.25,
+            alpha = 1.0,
+        )
+        levelUI.comboText = UIInfo(
+            anchorX = levelData.aspectRatio * 0.7,
+            anchorY = 0,
+            pivotX = 0.5,
+            pivotY = 1,
+            width = 0.5,
+            height = 0.15,
+            alpha = 1.0,
+        )
+        levelUI.scoreBar = UIInfo(
+            anchorX = 0.05 - levelData.aspectRatio,
+            anchorY = 0.95,
+            pivotX = 0,
+            pivotY = 1,
+            width = 0.75,
+            height = 0.15,
+            alpha = 1,
+            horizontalAlign = -1,
+            background = true,
+        )
+        levelUI.scoreValue = UIInfo(
+            anchorX = 0.2 - levelData.aspectRatio,
+            anchorY = 0.95,
+            pivotX = 0,
+            pivotY = 1,
+            width = 0.6,
+            height = 0.15,
+            alpha = 1,
+            horizontalAlign = 1
+        )
+
+        noteSpeed = options.noteSpeed
+        noteSize = options.noteSize
+        levelAudioOffset = options.offsetAudio
+        levelInputOffset = options.offsetInput
+
+        stageWidth = levelData.aspectRatio * 2
+        stageHeight = 2
+        laneWidth = (stageWidth/2)/4.375
+        laneYOffset = stageHeight/2
+        laneYMultiplier = stageHeight/-1.225
+        laneY1 = laneYOffset + laneYMultiplier
+        laneY2 = laneYOffset + laneYMultiplier*0.05
+        noteWidth = laneWidth*noteSize
+        noteHeight = noteSize * 0.08571 * stageHeight * 0.5
+        noteBaseY1 = 1 - noteHeight/laneYMultiplier
+        noteBaseY2 = 1 + noteHeight/laneYMultiplier
+
+        noteTimeOffset = levelAudioOffset/1000
+        inputOffset = levelData.deviceInputOffset + levelInputOffset/1000
+    }
+
+    callback updateSequential {
+        centerRectangle(Point(0, -0.6), levelData.aspectRatio, 0.05).draw(41_000, 0, 1)
+    }
+}
+
+archetype Stage -> Stage()
