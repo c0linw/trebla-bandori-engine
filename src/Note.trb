@@ -11,6 +11,7 @@
 // Unlike variable declarations, let declarations do not use their own memory
 // or make a copy of any value. It simply gives a name to refer to the value on the right.
 let preemptTime = (12 - noteSpeed) / 2
+let judgeYMax = 0
 
 // The timing windows, in seconds, for each judgement.
 // For example, a player must tap within 0.05 seconds of the note's time to receive a perfect judgement.
@@ -99,7 +100,9 @@ script Note {
     callback touch {
         var notTerminated = !(inputState matches InputState.Terminated)
         var enteredJudgmentWindow = targetTime - time <= goodWindow
-        if (notTerminated && touchData.started && enteredJudgmentWindow) {
+        var inTouchY = touchData.y <= judgeYMax
+        var inTouchX = abs(touchData.x - noteX) <= laneWidth * 1.175
+        if (notTerminated && touchData.started && enteredJudgmentWindow && inTouchX && inTouchY) {
             inputState = InputState.Terminated
             // "entityJudgement" is a variable built into Sonolus that holds
             // the final judgement value of each scored note.
